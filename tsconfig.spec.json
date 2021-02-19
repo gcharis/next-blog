@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/spec",
+    "types": ["jest", "node"],
+    "target": "es5",
+    "module": "commonjs",
+    "strict": true,
+    "declaration": true,
+    "sourceMap": true,
+    "jsx": "react"
+  },
+  "include": ["__tests__"]
+}

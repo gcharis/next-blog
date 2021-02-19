@@ -2,9 +2,8 @@ import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { Post } from '../../lib/posts/post';
 import { getAllPosts } from '../../lib/posts/service';
 import Link from 'next/link';
-import { useContext } from 'react';
-import { AuthContext } from '../../lib/auth/auth.hook';
 import { useRouter } from 'next/router';
+import React from 'react';
 
 export const getStaticProps: GetStaticProps<{ posts: Post[] }> = async ({}) => {
   console.warn('page init');
@@ -25,6 +24,7 @@ export const getStaticProps: GetStaticProps<{ posts: Post[] }> = async ({}) => {
 
 const PostsPage = ({ posts }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const router = useRouter();
+
   return (
     <main>
       {posts.map((post) => (

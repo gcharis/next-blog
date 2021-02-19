@@ -1,3 +1,6 @@
+/**
+ * @type {import("next/dist/next-server/server/config").NextConfig}
+ */
 module.exports = {
   i18n: {
     // These are all the locales you want to support in
