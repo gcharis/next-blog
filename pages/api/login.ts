@@ -5,7 +5,10 @@ import { API_URL } from '../../lib/config';
 export default async (req: any, res: any) => {
   try {
     const {
-      data: { jwt },
+      data: {
+        jwt,
+        user: { username },
+      },
     } = await axios.post(`${API_URL}/auth/local`, req.body);
 
     const {
@@ -14,6 +17,7 @@ export default async (req: any, res: any) => {
 
     setHttpCookie(req, res, 'auth', jwt, exp * 1000);
     setHttpCookie(req, res, 'uid', id, exp * 1000);
+    setHttpCookie(req, res, 'username', username, exp * 1000);
 
     res.send('ok');
   } catch (e) {

@@ -1,14 +1,5 @@
-import {
-  AppBar,
-  IconButton,
-  Toolbar,
-  Button,
-  Typography,
-  createStyles,
-  makeStyles,
-} from '@material-ui/core';
+import { AppBar, Toolbar, Button, Typography, createStyles, makeStyles } from '@material-ui/core';
 import React, { useContext } from 'react';
-import MenuIcon from '@material-ui/icons/Menu';
 import { AuthContext } from '../auth/auth.hook';
 import Link from 'next/link';
 import UserMenu from './user-menu.component';
@@ -20,6 +11,10 @@ const useStyles = makeStyles((theme) =>
     },
     title: {
       flexGrow: 1,
+
+      '&:hover': {
+        color: theme.palette.grey[300],
+      },
     },
   }),
 );
@@ -29,17 +24,21 @@ const Navbar: React.FC = () => {
   const { userId } = useContext(AuthContext);
 
   return (
-    <div className={classes.root}>
+    <nav className={classes.root}>
       <AppBar position="fixed" color="primary">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            Next Blog
+            <Link href="/posts">
+              <a>Next Blog</a>
+            </Link>
           </Typography>
+
           {(userId && <LogoutButton />) || <LoginButton />}
-          <UserMenu></UserMenu>
+
+          {userId && <UserMenu></UserMenu>}
         </Toolbar>
       </AppBar>
-    </div>
+    </nav>
   );
 };
 

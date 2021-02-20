@@ -1,20 +1,32 @@
-import React, { MouseEvent, useState } from 'react';
+import React, { MouseEvent, useContext, useMemo, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import AccountIcon from '@material-ui/icons/AccountCircle';
+import Link from 'next/link';
+import { AuthContext } from '../auth/auth.hook';
 
 const UserMenu: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const { username } = useContext(AuthContext);
 
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = (...e) => {
-    console.log(e);
+  const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const UserPostsMenuItem = useMemo(() => {
+    return React.forwardRef((props, ref) => (
+      <Link href={`/${username}/`}>
+        <MenuItem onClick={handleClose} innerRef={ref}>
+          My posts
+        </MenuItem>
+      </Link>
+    ));
+  }, [username]);
 
   return (
     <div>
@@ -28,7 +40,7 @@ const UserMenu: React.FC = () => {
         anchorEl={anchorEl}
         onClose={handleClose}
       >
-        <MenuItem>Profile</MenuItem>
+        <UserPostsMenuItem></UserPostsMenuItem>
       </Menu>
     </div>
   );
