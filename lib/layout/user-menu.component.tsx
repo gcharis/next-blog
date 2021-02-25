@@ -18,16 +18,6 @@ const UserMenu: React.FC = () => {
     setAnchorEl(null);
   };
 
-  const UserPostsMenuItem = useMemo(() => {
-    return React.forwardRef((props, ref) => (
-      <Link href={`/${username}/`}>
-        <MenuItem onClick={handleClose} innerRef={ref}>
-          My posts
-        </MenuItem>
-      </Link>
-    ));
-  }, [username]);
-
   return (
     <div>
       <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
@@ -40,10 +30,26 @@ const UserMenu: React.FC = () => {
         anchorEl={anchorEl}
         onClose={handleClose}
       >
-        <UserPostsMenuItem></UserPostsMenuItem>
+        <LinkMenuItem onClick={handleClose} href={`/${username}`}>
+          My posts
+        </LinkMenuItem>
+        <LinkMenuItem onClick={handleClose} href={`/${username}/new`}>
+          Create new
+        </LinkMenuItem>
       </Menu>
     </div>
   );
 };
+
+export const LinkMenuItem = React.forwardRef<
+  React.ReactElement,
+  React.PropsWithChildren<{ href: string; onClick: () => void }>
+>((props, ref) => (
+  <Link href={props.href}>
+    <MenuItem {...props} innerRef={ref}>
+      {props.children}
+    </MenuItem>
+  </Link>
+));
 
 export default UserMenu;

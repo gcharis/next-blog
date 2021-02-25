@@ -6,28 +6,27 @@ import {
   Grid,
   Button,
   makeStyles,
-  SvgIcon,
 } from '@material-ui/core';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Post } from './post';
 import moment from 'moment';
 import { AuthContext } from '../auth/auth.hook';
-import ReactMarkdown from 'react-markdown';
-import { EditSharp } from '@material-ui/icons';
+import { getDocumentCookie } from '../auth/auth.service';
+import axios from 'axios';
+import PostContentForm from './post-content-form.component';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
-    root: {},
     author: {
       color: theme.palette.primary.light,
     },
-    options: {},
   }),
 );
 
-const PostDetails: React.FC<{ post: Post }> = ({ post }) => {
+const PostDetails: React.FC<{ post: Post; isUser: boolean }> = ({ post, isUser }) => {
   const classes = useStyles();
   const { userId } = useContext(AuthContext);
+  const [isPreview, setIsPreview] = useState(true);
 
   const Subheader = (
     <div>
@@ -36,21 +35,46 @@ const PostDetails: React.FC<{ post: Post }> = ({ post }) => {
     </div>
   );
 
+  const onSubmit = ({ content }: Partial<Post>) => {
+    const jwt = getDocumentCookie('auth');
+    axios.put(
+      `http://localhost:1337/posts/${post.id}`,
+      { content },
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      },
+    );
+  };
+
   return (
     <Grid container spacing={2}>
-      <Grid item xs={10}>
-        <Card className={classes.root}>
+      <Grid item xs={userId && isUser ? 10 : 12}>
+        <Card>
           <CardHeader title={post.title} subheader={Subheader} />
           <CardContent>
-            <ReactMarkdown>{post?.content}</ReactMarkdown>
+            <PostContentForm
+              post={post}
+              isPreview={isPreview}
+              onSubmit={onSubmit}
+            ></PostContentForm>
           </CardContent>
         </Card>
       </Grid>
-      <Grid item>
-        <aside>
-          <Button color="primary">preview</Button>
-        </aside>
-      </Grid>
+      {userId === post.author.id && (
+        <Grid item>
+          <aside>
+            <Button
+              variant="contained"
+              color={isPreview ? 'default' : 'primary'}
+              onClick={(e) => setIsPreview((current) => !current)}
+            >
+              {isPreview ? 'edit' : 'preview'}
+            </Button>
+          </aside>
+        </Grid>
+      )}
     </Grid>
   );
 };
