@@ -2,12 +2,18 @@ import { Card, CardContent, CardHeader, createStyles, makeStyles, Theme } from '
 import moment from 'moment';
 import Link from 'next/link';
 import React from 'react';
+import ReactMarkdown, { EscapeHtmlProp } from 'react-markdown';
 import { Post } from './post';
+import strip from 'strip-markdown';
+import { RefreshSharp } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
     root: {
       marginBottom: '1rem',
+    },
+    author: {
+      color: theme.palette.primary.dark,
     },
   }),
 );
@@ -15,18 +21,29 @@ const useStyles = makeStyles((theme) =>
 const PostItem: React.FC<{ post: Post }> = ({ post }) => {
   const classes = useStyles();
   const PostAuthor = (
-    <Link href={`/${post.author.username}`}>
-      <a>By {post.author.username}</a>
-    </Link>
+    <>
+      By{' '}
+      <Link href={`/${post.author.username}`}>
+        <a className={classes.author}>{post.author.username}</a>
+      </Link>
+    </>
   );
 
-  const subheader = moment(post.createdAt).format('DD MMMM YYYY, hh:mm');
+  const Subheader = (
+    <>
+      {PostAuthor}, {moment(post.createdAt).format('DD MMM')}
+    </>
+  );
 
   return (
     <Card className={classes.root}>
-      <CardHeader title={PostAuthor} subheader={subheader} />
+      <CardHeader title={post.title} subheader={Subheader} />
       <CardContent>
-        <Link href={`/${post.author.username}/${post.id}`}>{post.title}</Link>
+        <Link href={`/${post.author.username}/${post.id}`}>
+          <a>
+            <ReactMarkdown plugins={[strip]}>{post.content.slice(0, 50) + '...'}</ReactMarkdown>
+          </a>
+        </Link>
       </CardContent>
     </Card>
   );

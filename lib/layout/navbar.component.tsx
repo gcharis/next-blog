@@ -28,7 +28,7 @@ const Navbar: React.FC = () => {
       <AppBar position="fixed" color="primary">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            <Link href="/posts">
+            <Link href="/">
               <a>Next Blog</a>
             </Link>
           </Typography>
