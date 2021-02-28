@@ -8,14 +8,14 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
 
   return {
     redirect: {
-      destination: '/posts',
+      destination: '/',
       statusCode: 302,
     },
   };
 };
 
 const LogoutPage = ({}) => {
-  return <main></main>;
+  return <main>loading...</main>;
 };
 
 export default LogoutPage;

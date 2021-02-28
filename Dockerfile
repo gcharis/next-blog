@@ -1,12 +1,12 @@
 FROM node:12-alpine
 WORKDIR /
 
-COPY package*.json .
+COPY package*.json ./
 RUN npm i
 
-COPY . .
+COPY . ./
 RUN npm run build
 
-EXPOSE 3000
+EXPOSE 3000:3000
 
 CMD ["npm", "run", "start"]

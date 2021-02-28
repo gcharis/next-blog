@@ -14,6 +14,7 @@ import { AuthContext } from '../auth/auth.hook';
 import { getDocumentCookie } from '../auth/auth.service';
 import axios from 'axios';
 import PostContentForm from './post-content-form.component';
+import { API_URL } from '../config';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -35,22 +36,26 @@ const PostDetails: React.FC<{ post: Post; isUser: boolean }> = ({ post, isUser }
     </div>
   );
 
-  const onSubmit = ({ content }: Partial<Post>) => {
+  const onSubmit = async ({ content }: Partial<Post>) => {
     const jwt = getDocumentCookie('auth');
-    axios.put(
-      `http://localhost:1337/posts/${post.id}`,
-      { content },
-      {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
+    try {
+      await axios.put(
+        `${API_URL}/posts/${post.id}`,
+        { content },
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+          },
         },
-      },
-    );
+      );
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={userId && isUser ? 10 : 12}>
+      <Grid item xs={12} md={userId && isUser ? 10 : 12}>
         <Card>
           <CardHeader title={post.title} subheader={Subheader} />
           <CardContent>
@@ -58,6 +63,7 @@ const PostDetails: React.FC<{ post: Post; isUser: boolean }> = ({ post, isUser }
               post={post}
               isPreview={isPreview}
               onSubmit={onSubmit}
+              btnLabel="update"
             ></PostContentForm>
           </CardContent>
         </Card>

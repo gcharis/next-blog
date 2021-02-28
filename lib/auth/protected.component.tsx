@@ -1,14 +1,14 @@
 import { useRouter } from 'next/router';
 import { useContext, useEffect } from 'react';
-import { AuthContext } from './auth.hook';
+import { getDocumentCookie } from './auth.service';
 
 const Protected: React.FC = ({ children }) => {
-  const { userId } = useContext(AuthContext);
+  const userId = getDocumentCookie('uid');
   const router = useRouter();
 
   useEffect(() => {
     if (!userId) {
-      router.push('/enter');
+      router.push('/login');
     }
   }, []);
 

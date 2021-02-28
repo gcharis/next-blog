@@ -12,6 +12,7 @@ import { useRouter } from 'next/router';
 import { useContext, useMemo, useState } from 'react';
 import { AuthContext } from '../auth/auth.hook';
 import { getDocumentCookie } from '../auth/auth.service';
+import { API_URL } from '../config';
 import { Post } from './post';
 import PostContentForm from './post-content-form.component';
 
@@ -22,6 +23,7 @@ const useStyles = makeStyles((theme) =>
       width: '100%',
       borderRadius: '5px',
       borderColor: 'lightgrey',
+      borderStyle: 'solid',
 
       '&:focus': {
         borderColor: 'lightgrey',
@@ -42,7 +44,7 @@ export const NewPostForm = () => {
     const jwt = getDocumentCookie('auth');
     try {
       axios.post(
-        `http://localhost:1337/posts`,
+        `${API_URL}/posts`,
         { title, content, author: userId },
         { headers: { Authorization: `Bearer ${jwt}` } },
       );
@@ -73,7 +75,11 @@ export const NewPostForm = () => {
               }
             />
             <CardContent>
-              <PostContentForm isPreview={isPreview} onSubmit={onSubmit}></PostContentForm>
+              <PostContentForm
+                isPreview={isPreview}
+                onSubmit={onSubmit}
+                btnLabel="create"
+              ></PostContentForm>
             </CardContent>
           </Card>
         </Grid>

@@ -9,7 +9,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   if (jwt) {
     return {
       redirect: {
-        destination: '/posts',
+        destination: '/',
         permanent: false,
       },
     };
@@ -29,7 +29,7 @@ const EnterPage = () => {
     e.preventDefault();
     try {
       await axios.post(`/api/login`, { identifier: email, password });
-      router.push('/posts');
+      router.push('/');
     } catch (e) {
       console.log(e.message);
     }

@@ -7,14 +7,19 @@ const useStyles = makeStyles(() =>
   createStyles({
     root: {
       height: '60vh',
-      border: 'none',
-      outline: 'none',
       padding: '0.5rem',
       fontSize: '1.25rem',
       width: '100%',
+      outline: 'none',
+      border: '2px solid lightgrey',
+      borderRadius: '5px',
     },
     'update-button': {
       width: '100%',
+    },
+
+    markdown: {
+      maxWidth: '100%',
     },
   }),
 );
@@ -23,7 +28,8 @@ const PostContentForm: React.FC<{
   post?: Post;
   isPreview: boolean;
   onSubmit: (post: Partial<Post>) => void;
-}> = ({ post, isPreview, onSubmit }) => {
+  btnLabel: string;
+}> = ({ post, isPreview, onSubmit, btnLabel }) => {
   const classes = useStyles();
   const [draftPostContent, setDraftPostContent] = useState(post?.content || '');
 
@@ -43,7 +49,7 @@ const PostContentForm: React.FC<{
             value={draftPostContent}
           ></textarea>
           <Button variant="contained" className={classes['update-button']} type="submit">
-            update
+            {btnLabel}
           </Button>
         </form>
       )) || <ReactMarkdown>{draftPostContent}</ReactMarkdown>}
