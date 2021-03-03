@@ -14,7 +14,7 @@ import { AuthContext } from '../auth/auth.hook';
 import { getDocumentCookie } from '../auth/auth.service';
 import axios from 'axios';
 import PostContentForm from './post-content-form.component';
-import { API_URL } from '../config';
+import { resolveUrl } from '../config';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -28,6 +28,7 @@ const PostDetails: React.FC<{ post: Post; isUser: boolean }> = ({ post, isUser }
   const classes = useStyles();
   const { userId } = useContext(AuthContext);
   const [isPreview, setIsPreview] = useState(true);
+  const API_URL = resolveUrl();
 
   const Subheader = (
     <div>

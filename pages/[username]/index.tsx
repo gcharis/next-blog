@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
-import { API_URL } from '../../lib/config';
+import { resolveUrl } from '../../lib/config';
 import { Post } from '../../lib/posts/post';
 import PostItem from '../../lib/posts/post-item.component';
 
@@ -9,6 +9,8 @@ export const getServerSideProps: GetServerSideProps<
   { posts: Post[] },
   { username: string }
 > = async ({ params }) => {
+  const API_URL = resolveUrl();
+
   const { data: posts } = await axios.get<Post[]>(`${API_URL}/users/${params.username}/posts`);
 
   if (!posts?.length) {
@@ -23,6 +25,8 @@ export const getServerSideProps: GetServerSideProps<
 };
 
 const UserPosts = ({ posts }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const API_URL = resolveUrl();
+
   return (
     <main>
       {posts.map((post) => (

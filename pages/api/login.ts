@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { setHttpCookie } from '../../lib/auth/auth.service';
-import { API_URL } from '../../lib/config';
+import { resolveUrl } from '../../lib/config';
 
 export default async (req: any, res: any) => {
+  const API_URL = resolveUrl();
+
   try {
     const {
       data: {

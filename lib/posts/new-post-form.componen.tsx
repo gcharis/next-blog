@@ -12,7 +12,7 @@ import { useRouter } from 'next/router';
 import { useContext, useMemo, useState } from 'react';
 import { AuthContext } from '../auth/auth.hook';
 import { getDocumentCookie } from '../auth/auth.service';
-import { API_URL } from '../config';
+import { resolveUrl } from '../config';
 import { Post } from './post';
 import PostContentForm from './post-content-form.component';
 
@@ -39,6 +39,8 @@ export const NewPostForm = () => {
   const [title, setTitle] = useState('');
   const classes = useStyles();
   const router = useRouter();
+
+  const API_URL = resolveUrl();
 
   const onSubmit = ({ content }: Partial<Post>) => {
     const jwt = getDocumentCookie('auth');
