@@ -53,7 +53,7 @@ export const LogoutButton: React.FC = () => {
 export const LoginButton: React.FC = () => {
   return (
     <Button color="inherit">
-      <Link href="/enter">Login</Link>
+      <Link href="/login">Login</Link>
     </Button>
   );
 };

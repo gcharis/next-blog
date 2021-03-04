@@ -42,10 +42,10 @@ export const NewPostForm = () => {
 
   const API_URL = resolveUrl();
 
-  const onSubmit = ({ content }: Partial<Post>) => {
+  const onSubmit = async ({ content }: Partial<Post>) => {
     const jwt = getDocumentCookie('auth');
     try {
-      axios.post(
+      await axios.post(
         `${API_URL}/posts`,
         { title, content, author: userId },
         { headers: { Authorization: `Bearer ${jwt}` } },
@@ -60,7 +60,7 @@ export const NewPostForm = () => {
   return (
     <>
       <Grid container spacing={2}>
-        <Grid item xs={10}>
+        <Grid item xs={12} md={10}>
           <Card>
             <CardHeader
               title={

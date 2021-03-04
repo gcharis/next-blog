@@ -38,10 +38,10 @@ echo "strapi-blog started!"
 
 echo "Building next app..."
 
-docker build -t gcharis/react2react .
+docker build --network host -t gcharis/react2react .
 
 echo "Stopping existing next app"
 docker stop react2react > logfile.log || true && docker rm react2react > logfile.log || true
 
 echo "Starting next app"
-docker run -e API_HOST=charis-blog -dp 3000:3000 --network ${superNetwork} --name react2react gcharis/react2react
+docker run -e API_HOST=charis-blog -dp 3000:3000 --network ${superNetwork} --name react2react gcharis/react2react 
