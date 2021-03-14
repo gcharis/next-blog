@@ -16,6 +16,7 @@ import axios from 'axios';
 import PostContentForm from './post-content-form.component';
 import { resolveUrl } from '../config';
 import { useRouter } from 'next/router';
+import { updatePost } from './service';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -45,12 +46,7 @@ const PostDetails: React.FC<{ post: Post; isUser: boolean }> = ({ post, isUser }
     e.preventDefault();
     const jwt = getDocumentCookie('auth');
     try {
-      await axios.put(
-        `${API_URL}/posts/${post.id}`,
-        { content: draftPostContent },
-        { headers: { Authorization: `Bearer ${jwt}` } },
-      );
-
+      await updatePost(post.id, draftPostContent);
       router.push(`/${username}/${post.id}`);
     } catch (e) {
       console.error(e);

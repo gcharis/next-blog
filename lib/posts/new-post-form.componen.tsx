@@ -14,6 +14,7 @@ import { AuthContext } from '../auth/auth.hook';
 import { getDocumentCookie } from '../auth/auth.service';
 import { resolveUrl } from '../config';
 import PostContentForm from './post-content-form.component';
+import { createNewPost } from './service';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -45,14 +46,9 @@ export const NewPostForm = () => {
 
   const handleSubmit: MouseEventHandler = async (e) => {
     e.preventDefault();
-    const jwt = getDocumentCookie('auth');
-    try {
-      await axios.post(
-        `${API_URL}/posts`,
-        { title, content: draftPostContent, author: userId },
-        { headers: { Authorization: `Bearer ${jwt}` } },
-      );
 
+    try {
+      await createNewPost(title, draftPostContent, userId);
       router.push(`/${username}`);
     } catch (e) {
       console.log(e.message);

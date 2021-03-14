@@ -4,14 +4,13 @@ import Link from 'next/link';
 import { resolveUrl } from '../../lib/config';
 import { Post } from '../../lib/posts/post';
 import PostItem from '../../lib/posts/post-item.component';
+import { getUserPosts } from '../../lib/posts/service';
 
 export const getServerSideProps: GetServerSideProps<
   { posts: Post[] },
   { username: string }
 > = async ({ params }) => {
-  const API_URL = resolveUrl();
-
-  const { data: posts } = await axios.get<Post[]>(`${API_URL}/users/${params.username}/posts`);
+  const posts = await getUserPosts(params.username);
 
   if (!posts?.length) {
     return {

@@ -1,8 +1,8 @@
 import '../styles/globals.css';
 import { AuthContext, useAuth } from '../lib/auth/auth.hook';
 import Navbar from '../lib/layout/navbar.component';
-import Palette from '../lib/material/theme-provider.component';
-import LoadingSuspense from '../lib/material/loading-suspense';
+import Palette from '../lib/utils/theme-provider.component';
+import LoadingSuspense from '../lib/utils/loading-suspense';
 import ContentContainer from '../lib/layout/content-container.component';
 import type { AppProps } from 'next/app';
 

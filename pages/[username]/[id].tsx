@@ -5,6 +5,7 @@ import { AuthContext } from '../../lib/auth/auth.hook';
 import { resolveUrl } from '../../lib/config';
 import { Post } from '../../lib/posts/post';
 import PostDetails from '../../lib/posts/post-details.component';
+import { getAllPosts, getPost } from '../../lib/posts/service';
 
 export const getStaticProps: GetStaticProps<
   { post: Post; usernameInView: string },
@@ -13,7 +14,7 @@ export const getStaticProps: GetStaticProps<
   const API_URL = resolveUrl();
 
   if (params.id) {
-    const { data: post } = await axios.get<Post>(`${API_URL}/posts/${params.id}`);
+    const post = await getPost(params.id);
 
     return { props: { post, usernameInView: params.username }, revalidate: 5 };
   }
@@ -23,9 +24,7 @@ export const getStaticProps: GetStaticProps<
 };
 
 export const getStaticPaths: GetStaticPaths = async (context) => {
-  const API_URL = resolveUrl();
-
-  const { data: posts } = await axios.get<Post[]>(`${API_URL}/posts`);
+  const posts = await getAllPosts();
   const paths = posts.map((post) => ({
     params: { username: post.author.username, id: post.id },
   }));
