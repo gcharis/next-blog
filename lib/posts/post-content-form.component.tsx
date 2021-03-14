@@ -1,6 +1,5 @@
-import { Button, createStyles, makeStyles } from '@material-ui/core';
+import { createStyles, makeStyles } from '@material-ui/core';
 import React, { useState } from 'react';
-import { Post } from './post';
 import ReactMarkdown from 'react-markdown';
 
 const useStyles = makeStyles(() =>
@@ -14,9 +13,6 @@ const useStyles = makeStyles(() =>
       border: '2px solid lightgrey',
       borderRadius: '5px',
     },
-    'update-button': {
-      width: '100%',
-    },
 
     markdown: {
       maxWidth: '100%',
@@ -25,33 +21,27 @@ const useStyles = makeStyles(() =>
 );
 
 const PostContentForm: React.FC<{
-  post?: Post;
+  initialContent?: string;
   isPreview: boolean;
-  onSubmit: (post: Partial<Post>) => void;
-  btnLabel: string;
-}> = ({ post, isPreview, onSubmit, btnLabel }) => {
+  onChange: (postContent: string) => void;
+}> = ({ initialContent, isPreview, onChange }) => {
   const classes = useStyles();
-  const [draftPostContent, setDraftPostContent] = useState(post?.content || '');
+  const [draftPostContent, setDraftPostContent] = useState(initialContent || '');
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit({ content: draftPostContent });
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setDraftPostContent(e.target.value);
+    onChange(e.target.value);
   };
 
   return (
     <>
       {(!isPreview && (
-        <form onSubmit={handleSubmit}>
-          <textarea
-            className={classes.root}
-            name="content"
-            onChange={(e) => setDraftPostContent(e.target.value)}
-            value={draftPostContent}
-          ></textarea>
-          <Button variant="contained" className={classes['update-button']} type="submit">
-            {btnLabel}
-          </Button>
-        </form>
+        <textarea
+          className={classes.root}
+          name="content"
+          onChange={handleChange}
+          value={draftPostContent}
+        ></textarea>
       )) || <ReactMarkdown>{draftPostContent}</ReactMarkdown>}
     </>
   );

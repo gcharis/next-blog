@@ -7,7 +7,7 @@ import {
   Button,
   makeStyles,
 } from '@material-ui/core';
-import React, { useContext, useState } from 'react';
+import React, { MouseEventHandler, useContext, useState } from 'react';
 import { Post } from './post';
 import moment from 'moment';
 import { AuthContext } from '../auth/auth.hook';
@@ -15,6 +15,7 @@ import { getDocumentCookie } from '../auth/auth.service';
 import axios from 'axios';
 import PostContentForm from './post-content-form.component';
 import { resolveUrl } from '../config';
+import { useRouter } from 'next/router';
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -26,9 +27,12 @@ const useStyles = makeStyles((theme) =>
 
 const PostDetails: React.FC<{ post: Post; isUser: boolean }> = ({ post, isUser }) => {
   const classes = useStyles();
-  const { userId } = useContext(AuthContext);
+  const { userId, username } = useContext(AuthContext);
   const [isPreview, setIsPreview] = useState(true);
   const API_URL = resolveUrl();
+  const router = useRouter();
+
+  const [draftPostContent, setDraftPostContent] = useState(post.content);
 
   const Subheader = (
     <div>
@@ -37,48 +41,66 @@ const PostDetails: React.FC<{ post: Post; isUser: boolean }> = ({ post, isUser }
     </div>
   );
 
-  const onSubmit = async ({ content }: Partial<Post>) => {
+  const handleSubmit: MouseEventHandler = async (e) => {
+    e.preventDefault();
     const jwt = getDocumentCookie('auth');
     try {
       await axios.put(
         `${API_URL}/posts/${post.id}`,
-        { content },
-        {
-          headers: {
-            Authorization: `Bearer ${jwt}`,
-          },
-        },
+        { content: draftPostContent },
+        { headers: { Authorization: `Bearer ${jwt}` } },
       );
+
+      router.push(`/${username}/${post.id}`);
     } catch (e) {
       console.error(e);
     }
   };
 
+  const handleContentChange = (postContent: string) => {
+    setDraftPostContent(postContent);
+  };
+
   return (
     <Grid container spacing={2}>
-      <Grid item xs={12} md={userId && isUser ? 10 : 12}>
+      <Grid item xs={12} sm={userId && isUser ? 10 : 12}>
         <Card>
           <CardHeader title={post.title} subheader={Subheader} />
           <CardContent>
             <PostContentForm
-              post={post}
+              initialContent={post.content}
               isPreview={isPreview}
-              onSubmit={onSubmit}
-              btnLabel="update"
+              onChange={handleContentChange}
             ></PostContentForm>
           </CardContent>
         </Card>
       </Grid>
       {userId === post.author.id && (
-        <Grid item>
+        <Grid item xs={12} sm={2}>
           <aside>
-            <Button
-              variant="contained"
-              color={isPreview ? 'default' : 'primary'}
-              onClick={(e) => setIsPreview((current) => !current)}
-            >
-              {isPreview ? 'edit' : 'preview'}
-            </Button>
+            <Grid container spacing={2} direction="column">
+              <Grid item>
+                <Button
+                  variant="contained"
+                  color={isPreview ? 'default' : 'primary'}
+                  style={{ width: '100%' }}
+                  onClick={(e) => setIsPreview((current) => !current)}
+                >
+                  {isPreview ? 'edit' : 'preview'}
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button
+                  variant="contained"
+                  type="button"
+                  style={{ width: '100%' }}
+                  onClick={handleSubmit}
+                  disabled={draftPostContent === post.content}
+                >
+                  Update
+                </Button>
+              </Grid>
+            </Grid>
           </aside>
         </Grid>
       )}
