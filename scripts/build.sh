@@ -43,7 +43,7 @@ function confirmApi() {
 
 function buildApp() {
   dockerfile=""
-  if (($1 == "dev")); then
+  if [[ $1 == "dev" ]]; then
     dockerfile="Dockerfile.dev"
   else
     dockerfile="Dockerfile.prod"
