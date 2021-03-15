@@ -56,7 +56,7 @@ function startApp() {
   echo -e "${LIGHT_GREEN}App started successfully!${NO_COLOUR}" | tee /dev/fd/3
 }
 
-superNetwork="react2react_backend"
+superNetwork="react2react-backend"
 
 if (getNetwork ${superNetwork}); then
   echo -e "${LIGHT_GREEN}network ${superNetwork} is ok!${NO_COLOUR}" | tee /dev/fd/3
