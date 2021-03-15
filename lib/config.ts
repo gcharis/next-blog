@@ -3,5 +3,5 @@ export const resolveUrl = () => {
     return `http://${process.env.API_HOST}:1337`;
   }
 
-  return 'http://localhost:1337';
+  return EXT_API_HOST;
 };
