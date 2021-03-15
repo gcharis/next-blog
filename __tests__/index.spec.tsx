@@ -1,4 +1,4 @@
-import Enzyme, { mount, shallow } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import PostsPage from '../pages';
 import React from 'react';
 import { Post } from '../lib/posts/post';

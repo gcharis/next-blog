@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { getDocumentCookie } from './auth.service';
 
 const Protected: React.FC = ({ children }) => {

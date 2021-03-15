@@ -1,0 +1,15 @@
+FROM node:12-alpine
+
+RUN mkdir /project
+WORKDIR /project
+
+COPY package*.json ./
+RUN npm i
+
+ENV EXPOSED_API_HOST=http://localhost:1337
+COPY . ./
+RUN npm run build
+
+EXPOSE 3000
+
+CMD ["npm", "run", "start"]

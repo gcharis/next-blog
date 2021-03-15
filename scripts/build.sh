@@ -42,8 +42,15 @@ function confirmApi() {
 }
 
 function buildApp() {
-  echo "Building next app..." | tee /dev/fd/3
-  docker build --network host -t gcharis/react2react .
+  dockerfile=""
+  if (($1 == "dev")); then
+    dockerfile="Dockerfile.dev"
+  else
+    dockerfile="Dockerfile.prod"
+  fi
+
+  echo -e "${RED}$1${NO_COLOUR}: Building next app..." | tee /dev/fd/3
+  docker build --network host -t gcharis/react2react -f ${dockerfile} .
   echo -e "${LIGHT_GREEN}App built successfully!${NO_COLOUR}" | tee /dev/fd/3
   echo -e "${LIGHT_GREEN}Api started successfully!${NO_COLOUR}" | tee /dev/fd/3
 }
@@ -51,10 +58,12 @@ function buildApp() {
 function startApp() {
   echo "Starting next app" | tee /dev/fd/3
   docker stop react2react || true && docker rm react2react || true
-  docker run -e API_HOST=superapi -dp 3000:3000 --network ${superNetwork} --name react2react gcharis/react2react
+  docker run -e INTERNAL_API_HOST=superapi -dp 3000:3000 --network ${superNetwork} --name react2react gcharis/react2react
 
   echo -e "${LIGHT_GREEN}App started successfully!${NO_COLOUR}" | tee /dev/fd/3
 }
+
+env=$1
 
 superNetwork="react2react-backend"
 
@@ -70,5 +79,5 @@ fi
 startBackend
 confirmApi
 
-buildApp
+buildApp ${env}
 startApp

@@ -7,7 +7,7 @@ export const setHttpCookie = (
   res: ServerResponse,
   name: string,
   value: string,
-  expirationDate?: number,
+  expirationDate: number,
 ) => {
   const cookies = new Cookies(req, res);
 

@@ -7,6 +7,7 @@ module.exports = {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
     },
+    EXPOSED_API_HOST: 'mock_host',
   },
   preset: 'ts-jest',
   setupFilesAfterEnv: ['./setup-jest.ts'],

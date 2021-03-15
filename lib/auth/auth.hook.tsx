@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from 'react';
-import { clearAuthCookies, deleteDocumentCookie, getDocumentCookie } from './auth.service';
+import { clearAuthCookies, getDocumentCookie } from './auth.service';
 
 export const AuthContext = createContext<ReturnType<typeof useAuth>>(null);
 

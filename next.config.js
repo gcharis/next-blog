@@ -7,7 +7,7 @@ module.exports = {
     // Perform customizations to webpack config
     config.plugins.push(
       new webpack.DefinePlugin({
-        EXT_API_HOST: JSON.stringify(process.env.EXT_API_HOST),
+        EXPOSED_API_HOST: JSON.stringify(process.env.EXPOSED_API_HOST),
       }),
     );
 
