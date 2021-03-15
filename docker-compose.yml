@@ -1,0 +1,23 @@
+services: 
+  db:
+    image: mongo
+    volumes: 
+      - db:/data/db
+    networks: 
+      - backend
+  api:
+    image: gcharis/blog-api
+    ports: 
+      - '1337:1337'
+    networks:
+        backend:
+          aliases: 
+            - superapi
+    depends_on: 
+      - db
+
+volumes: 
+  db: 
+networks: 
+  backend:
+    driver: 'bridge'

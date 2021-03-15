@@ -17,10 +17,14 @@ function getNetwork() {
   docker network inspect $1
 }
 
-function startApi() {
-  echo "Starting api..." | tee /dev/fd/3
-  docker stop blog-api || true && docker rm blog-api || true
-  docker run -dp 1337:1337 --network ${superNetwork} --network-alias blog-api --name blog-api gcharis/blog-api
+# function startApi() {
+#   echo "Starting api..." | tee /dev/fd/3
+#   docker stop blog-api || true && docker rm blog-api || true
+#   docker run -dp 1337:1337 --network ${superNetwork} --network-alias blog-api --name blog-api gcharis/blog-api
+# }
+
+function startBackend() {
+  docker-compose up -d | tee /dev/fd/3
 }
 
 function confirmApi() {
@@ -47,12 +51,12 @@ function buildApp() {
 function startApp() {
   echo "Starting next app" | tee /dev/fd/3
   docker stop react2react || true && docker rm react2react || true
-  docker run -e API_HOST=blog-api -dp 3000:3000 --network ${superNetwork} --name react2react gcharis/react2react
+  docker run -e API_HOST=superapi -dp 3000:3000 --network ${superNetwork} --name react2react gcharis/react2react
 
   echo -e "${LIGHT_GREEN}App started successfully!${NO_COLOUR}" | tee /dev/fd/3
 }
 
-superNetwork="react2react"
+superNetwork="react2react_backend"
 
 if (getNetwork ${superNetwork}); then
   echo -e "${LIGHT_GREEN}network ${superNetwork} is ok!${NO_COLOUR}" | tee /dev/fd/3
@@ -62,7 +66,8 @@ else
   echo -e "${LIGHT_GREEN}network ${superNetwork} is ok!${NO_COLOUR}" | tee /dev/fd/3
 fi
 
-startApi
+# startApi
+startBackend
 confirmApi
 
 buildApp
