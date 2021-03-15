@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "pack:dev": "sh scripts/build.sh dev",
-    "pack:prod": "sh scripts/build.sh prod",
+    "pack:dev": "bash scripts/build.sh dev",
+    "pack:prod": "bash scripts/build.sh prod",
     "build": "next build",
     "start": "next start",
     "test": "jest"
