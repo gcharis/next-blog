@@ -3,6 +3,7 @@ import { Post } from '../lib/posts/post';
 import { getAllPosts } from '../lib/posts/service';
 import React from 'react';
 import PostList from '../lib/posts/post-list.component';
+import Metatags from '../lib/utils/metatags.component';
 
 export const getServerSideProps: GetServerSideProps<{ posts: Post[] }> = async ({}) => {
   try {
@@ -22,9 +23,15 @@ export const getServerSideProps: GetServerSideProps<{ posts: Post[] }> = async (
 
 const PostsPage = ({ posts }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
-    <main>
-      <PostList posts={posts}></PostList>
-    </main>
+    <>
+      <Metatags
+        title="Next-blog"
+        description="The place to share knowledge, ideas and interests."
+      />
+      <main>
+        <PostList posts={posts}></PostList>
+      </main>
+    </>
   );
 };
 

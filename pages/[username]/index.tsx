@@ -1,13 +1,12 @@
-import axios from 'axios';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
-import { resolveUrl } from '../../lib/config';
 import { Post } from '../../lib/posts/post';
 import PostItem from '../../lib/posts/post-item.component';
 import { getUserPosts } from '../../lib/posts/service';
+import Metatags from '../../lib/utils/metatags.component';
 
 export const getServerSideProps: GetServerSideProps<
-  { posts: Post[] },
+  { posts: Post[]; username: string },
   { username: string }
 > = async ({ params }) => {
   const posts = await getUserPosts(params.username);
@@ -19,21 +18,22 @@ export const getServerSideProps: GetServerSideProps<
   }
 
   return {
-    props: { posts },
+    props: { posts, username: params.username },
   };
 };
 
-const UserPosts = ({ posts }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const API_URL = resolveUrl();
-
+const UserPosts = ({ posts, username }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
-    <main>
-      {posts.map((post) => (
-        <PostItem key={post.id} post={post}>
-          <Link href={`/posts/${post.id}`}>{post.title}</Link>
-        </PostItem>
-      ))}
-    </main>
+    <>
+      <Metatags title={username} description={username} />
+      <main>
+        {posts.map((post) => (
+          <PostItem key={post.id} post={post}>
+            <Link href={`/posts/${post.id}`}>{post.title}</Link>
+          </PostItem>
+        ))}
+      </main>
+    </>
   );
 };
 
