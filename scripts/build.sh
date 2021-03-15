@@ -51,7 +51,7 @@ function buildApp() {
 function startApp() {
   echo "Starting next app" | tee /dev/fd/3
   docker stop react2react || true && docker rm react2react || true
-  docker run -e API_HOST=superapi -e EXT_API_HOST=https://admin.gcharis.com -dp 3000:3000 --network ${superNetwork} --name react2react gcharis/react2react
+  docker run -e API_HOST=superapi -dp 3000:3000 --network ${superNetwork} --name react2react gcharis/react2react
 
   echo -e "${LIGHT_GREEN}App started successfully!${NO_COLOUR}" | tee /dev/fd/3
 }
