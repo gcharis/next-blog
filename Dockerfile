@@ -1,5 +1,7 @@
 FROM node:12-alpine
-WORKDIR /
+
+RUN mkdir /project
+WORKDIR /project
 
 COPY package*.json ./
 RUN npm i
